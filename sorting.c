@@ -3,8 +3,8 @@
 #include "sorting.h"
 
 // Helper function
-// 
-// Returns
+// Returns pointer to linked list of backwards sequence
+// static Node *Get_Seq(Node *list);
 
 Node *Load_From_File(char *Filename) {
 	FILE *fp = fopen(Filename, "r");
@@ -14,9 +14,12 @@ Node *Load_From_File(char *Filename) {
 	int nels = len / sizeof(long);
 	fseek(fp, 0, SEEK_SET);
 	// Load elements into linked list
-	Node *head = malloc(sizeof(Node));
-	fread(&(head -> value), sizeof(long), 1, fp);
-	Node *cur = head;
+	// Create an auxiliary head node to make other functions work
+	// ex. list -> auxiliary head node -> data node -> data node ->...
+	Node *list = malloc(sizeof(Node));
+	list -> next = malloc(sizeof(Node));
+	Node *cur = list -> next;
+	fread(&(cur -> value), sizeof(long), 1, fp);
 	for (int i = 1; i < nels; i++) {
 		cur -> next = malloc(sizeof(Node));
 		cur = cur -> next;
@@ -24,20 +27,25 @@ Node *Load_From_File(char *Filename) {
 		cur -> next = NULL;
 	}
 	fclose(fp);
-	return head;
+	return list;
 }
 
 int Save_To_File(char *Filename, Node *list) {
 	FILE *fp = fopen(Filename, "w");
-	Node *cur = list;
+	Node *cur = list -> next;
 	int nels_written = 0;
 	while (cur != NULL) {
 		fwrite(&(cur -> value), sizeof(long), 1, fp);
 		cur = cur -> next;
 		nels_written++;
 	}
+	fclose(fp);
 	return nels_written;
 }
 /*
+static Node *Get_Seq(Node *list) {
+	
+}
+
 Node *Shell_Sort(Node *list);
 */
