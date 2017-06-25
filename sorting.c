@@ -22,14 +22,22 @@ Node *Load_From_File(char *Filename) {
 		cur = cur -> next;
 		fread(&(cur -> value), sizeof(long), 1, fp);
 		cur -> next = NULL;
-		printf("i = %d\n", i);
 	}
+	fclose(fp);
 	return head;
 }
-/*
+
 int Save_To_File(char *Filename, Node *list) {
-
+	FILE *fp = fopen(Filename, "w");
+	Node *cur = list;
+	int nels_written = 0;
+	while (cur != NULL) {
+		fwrite(&(cur -> value), sizeof(long), 1, fp);
+		cur = cur -> next;
+		nels_written++;
+	}
+	return nels_written;
 }
-
+/*
 Node *Shell_Sort(Node *list);
 */
