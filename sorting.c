@@ -75,34 +75,18 @@ static Node *Get_Seq(Node *list, long *nels_list) {
 	return seq;
 }
 
-void Print_Seq(Node *list) {
-	long nels_list = 0;
-	Node *seq = Get_Seq(list, &nels_list);
-	Node *cur = seq -> next;
-	printf("\n\nSequence\n");
-	while (cur != NULL) {
-		printf("%ld\n", cur -> value);
-		cur = cur -> next;
-	}
-}
-
 Node *Shell_Sort(Node *list) {
-	Node *cur; // DELETE
 	long nels = 0, col, k, i;
 	Node *p1, *p2, *temp;
 	// Generate sequence
-	Node *seq = Get_Seq(list, &nels);
-	printf("nels = %ld\n", nels);
-	seq = seq -> next; // skip over auxiliary head node
+	Node *seq_ptr = Get_Seq(list, &nels);
+	Node *seq = seq_ptr -> next; // skip over auxiliary head node
 	// For each number in sequence...
 	while (seq != NULL) {
-		printf("\nseq num = %ld\n", seq -> value);
 		// For each "column" from right to left (indexing from 0)...
 		for (col = nels - 1; col >= nels - (seq -> value); col--) {
-			printf("col = %ld\n", col);
 			// For each "insertion"...
 			for (k = col - (seq -> value); k >= 0; k -= (seq -> value)) {
-				printf("k = %ld\n", k);
 				// p1 points to the node BEFORE the node at index k
 				// p2 points to the node BEFORE the comparison node
 				p1 = list;
@@ -131,14 +115,12 @@ Node *Shell_Sort(Node *list) {
 			}
 		}
 		seq = seq -> next;
-	
-		// DELETE
-		printf("Output Array:\n");
-		cur = list -> next;
-		while (cur != NULL) {
-			printf("%ld\n", cur -> value);
-			cur = cur -> next;
-		}
+	}
+	// Deallocate the sequence
+	while (seq_ptr != NULL) {
+		temp = seq_ptr;
+		seq_ptr = seq_ptr -> next;
+		free(temp);
 	}
 	return list;
 }
