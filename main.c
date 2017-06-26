@@ -4,15 +4,26 @@
 #include "sorting.h"
 
 int main(int argc, char **argv) {
+	clock_t start_t, end_t;
+	double io_t = 0, sorting_t = 0;
+	
 	// Load data from file and store in linked list
+	start_t = clock();
 	Node * list = Load_From_File(argv[1]);
+	end_t = clock();
+	io_t += (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
 	// Sort the data
-	list = Shell_Sort(list);	
+	start_t = clock();
+	list = Shell_Sort(list);
+	end_t = clock();
+	sorting_t += (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
 	// Write the data from linked list to file
-	int nels_w = Save_To_File(argv[2], list);
-	printf("nels_w = %d\n", nels_w);
+	start_t = clock();
+	Save_To_File(argv[2], list);
+	end_t = clock();
+	io_t += (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
 	// Deallocate list
 	Node *temp;
@@ -21,6 +32,10 @@ int main(int argc, char **argv) {
 		list = list -> next;
 		free(temp);
 	}
+
+	// Print statistics to stdout
+	printf("I/O time: %le\n", io_t);
+	printf("Sorting time: %le\n", sorting_t);
 
 	return 0;
 }

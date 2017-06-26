@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include "sorting.h"
 
-// Helper function
-// Returns pointer to linked list of backwards sequence
+// Helper function - Sequence Generation
+// Sequence linked list has an auxiliary head node at start and is in reverse
+// Returns pointer to auxiliary head node
 static Node *Get_Seq(Node *list, long *nels_list);
 
 Node *Load_From_File(char *Filename) {
@@ -14,11 +15,8 @@ Node *Load_From_File(char *Filename) {
 	int nels = len / sizeof(long);
 	fseek(fp, 0, SEEK_SET);
 	// Load elements into linked list
-	// Create an auxiliary head node to make other functions work
-	// ex. list -> auxiliary head node -> data node -> data node ->...
 	Node *list = malloc(sizeof(Node));
-	list -> next = malloc(sizeof(Node));
-	Node *cur = list -> next;
+	Node *cur = list;
 	fread(&(cur -> value), sizeof(long), 1, fp);
 	for (int i = 1; i < nels; i++) {
 		cur -> next = malloc(sizeof(Node));
@@ -32,7 +30,7 @@ Node *Load_From_File(char *Filename) {
 
 int Save_To_File(char *Filename, Node *list) {
 	FILE *fp = fopen(Filename, "w");
-	Node *cur = list -> next;
+	Node *cur = list;
 	int nels_written = 0;
 	while (cur != NULL) {
 		fwrite(&(cur -> value), sizeof(long), 1, fp);
@@ -50,9 +48,8 @@ static Node *Get_Seq(Node *list, long *nels_list) {
 		cur = cur -> next;
 		(*nels_list)++;
 	}
-	// Sequence is in reverse
-	// Create an auxiliary head node
-	// ex. seq -> auxiliary head node -> last value node ->...
+	// Sequence is in reverse and has an auxiliary head node
+	// ex. seq -> auxiliary head node -> last value node -> second to last...
 	Node *seq = malloc(sizeof(Node));
 	seq -> next = NULL;
 	Node *new;
@@ -75,9 +72,14 @@ static Node *Get_Seq(Node *list, long *nels_list) {
 	return seq;
 }
 
-Node *Shell_Sort(Node *list) {
+Node *Shell_Sort(Node *list) {	
 	long nels = 0, col, k, i;
 	Node *p1, *p2, *temp;
+	// Create an auxiliary head node for the list (needed for sorting)
+	// i.e. list -> auxiliary head node -> data node -> ...
+	temp = list;
+	list = malloc(sizeof(Node));
+	list -> next = temp;	
 	// Generate sequence
 	Node *seq_ptr = Get_Seq(list, &nels);
 	Node *seq = seq_ptr -> next; // skip over auxiliary head node
@@ -122,6 +124,10 @@ Node *Shell_Sort(Node *list) {
 		seq_ptr = seq_ptr -> next;
 		free(temp);
 	}
+	// Deallocate auxiliary head node
+	temp = list -> next;
+	free(list);
+	list = temp;
 	return list;
 }
 

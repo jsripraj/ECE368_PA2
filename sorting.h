@@ -12,7 +12,8 @@ Node *Load_From_File(char *Filename);
 // Returns number of ints successfully written
 int Save_To_File(char *Filename, Node *list);
 
-// Takes in a linked list of longs and sorts them by manipulating next pointers
+// Shell Insertion Sort
+// Sorts by manipulating next pointers
 // Deallocates sequence before returning
 // Returns pointer to first node in sorted list
 Node *Shell_Sort(Node *list);
