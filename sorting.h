@@ -21,3 +21,7 @@ int Save_To_File(char *Filename, Node *list);
 // Takes in a linked list of longs and sorts them by manipulating next pointers
 // Returns pointer to first node in sorted list
 Node *Shell_Sort(Node *list);
+
+// DELETE DELETE DELETE //
+// Debugging function, prints out sequence
+void Print_Seq(Node *list);

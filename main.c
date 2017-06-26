@@ -12,6 +12,8 @@ int main(int argc, char **argv) {
 		printf("%ld\n", cur -> value);
 		cur = cur -> next;
 	}
+	
+	Print_Seq(list);
 
 	// Write long ints from linked list to file
 	int nels_w = Save_To_File(argv[2], list);
