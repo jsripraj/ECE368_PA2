@@ -85,6 +85,61 @@ void Print_Seq(Node *list) {
 		cur = cur -> next;
 	}
 }
-/*
-Node *Shell_Sort(Node *list);
-*/
+
+Node *Shell_Sort(Node *list) {
+	Node *cur; // DELETE
+	long nels = 0, col, k, i;
+	Node *p1, *p2, *temp;
+	// Generate sequence
+	Node *seq = Get_Seq(list, &nels);
+	printf("nels = %ld\n", nels);
+	seq = seq -> next; // skip over auxiliary head node
+	// For each number in sequence...
+	while (seq != NULL) {
+		printf("\nseq num = %ld\n", seq -> value);
+		// For each "column" from right to left (indexing from 0)...
+		for (col = nels - 1; col >= nels - (seq -> value); col--) {
+			printf("col = %ld\n", col);
+			// For each "insertion"...
+			for (k = col - (seq -> value); k >= 0; k -= (seq -> value)) {
+				printf("k = %ld\n", k);
+				// p1 points to the node BEFORE the node at index k
+				// p2 points to the node BEFORE the comparison node
+				p1 = list;
+				for (i = 0; i < k; i++) {
+					p1 = p1 -> next;
+				}
+				p2 = p1;
+				for (i = 0; i < (seq -> value); i++) {
+					p2 = p2 -> next;
+				}
+				// Compare values until the end of the "column"
+				while (p2 -> next != NULL && p1 -> next -> value > p2 -> next -> value) {
+					// Swap pointers
+					temp = p1 -> next;
+					p1 -> next = p2 -> next;
+					p2 -> next = temp;
+					temp = p1 -> next -> next;
+					p1 -> next -> next = p2 -> next -> next;
+					p2 -> next -> next = temp;
+					// Move the pointers to the next comparison
+					for (i = 0; p2 -> next != NULL && i < seq -> value; i++) {
+						p1 = p1 -> next;
+						p2 = p2 -> next;
+					}
+				}
+			}
+		}
+		seq = seq -> next;
+	
+		// DELETE
+		printf("Output Array:\n");
+		cur = list -> next;
+		while (cur != NULL) {
+			printf("%ld\n", cur -> value);
+			cur = cur -> next;
+		}
+	}
+	return list;
+}
+
