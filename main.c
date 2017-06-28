@@ -10,6 +10,9 @@ int main(int argc, char **argv) {
 	// Load data from file and store in linked list
 	start_t = clock();
 	Node * list = Load_From_File(argv[1]);
+	if (list == (Node *)EXIT_FAILURE) {
+		return EXIT_FAILURE;
+	}
 	end_t = clock();
 	io_t += (double)(end_t - start_t) / CLOCKS_PER_SEC;
 
