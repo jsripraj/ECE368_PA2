@@ -4,6 +4,10 @@
 #include "sorting.h"
 
 int main(int argc, char **argv) {
+	if (argc != 3) {
+		printf("Number of arguments must be 3!\n");
+		return EXIT_FAILURE;
+	}
 	clock_t start_t, end_t;
 	double io_t = 0, sorting_t = 0;
 	

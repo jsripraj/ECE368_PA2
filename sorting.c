@@ -10,7 +10,7 @@ static Node *Get_Seq(Node *list, long *nels_list);
 Node *Load_From_File(char *Filename) {
 	FILE *fp = fopen(Filename, "r");
 	if (fp == NULL) {
-		perror("Error: ");
+		perror("Error ");
 		return (Node *)EXIT_FAILURE;
 	}
 	// Determine how many longs are in file
