@@ -9,16 +9,24 @@ static Node *Get_Seq(Node *list, long *nels_list);
 
 Node *Load_From_File(char *Filename) {
 	FILE *fp = fopen(Filename, "r");
+	if (fp == NULL) {
+		perror("Error: ");
+		return (Node *)EXIT_FAILURE;
+	}
 	// Determine how many longs are in file
 	fseek(fp, 0, SEEK_END);
 	int len = ftell(fp);
 	int nels = len / sizeof(long);
 	fseek(fp, 0, SEEK_SET);
 	// Load elements into linked list
-	Node *list = malloc(sizeof(Node));
+	Node * list = NULL;
+	if (nels > 0) {
+		list = malloc(sizeof(Node));
+	}
 	Node *cur = list;
 	fread(&(cur -> value), sizeof(long), 1, fp);
-	for (int i = 1; i < nels; i++) {
+	int i;
+	for (i = 1; i < nels; i++) {
 		cur -> next = malloc(sizeof(Node));
 		cur = cur -> next;
 		fread(&(cur -> value), sizeof(long), 1, fp);
