@@ -3,8 +3,8 @@
 #include "sorting.h"
 
 // Helper function - Sequence Generation
-// Sequence linked list has an auxiliary head node at start and is in reverse
-// Returns pointer to auxiliary head node
+// Sequence is stored in reverse
+// Returns pointer to first node (the last value in the sequence)
 static Node *Get_Seq(Node *list, long *nels_list);
 
 Node *Load_From_File(char *Filename) {
@@ -56,11 +56,9 @@ static Node *Get_Seq(Node *list, long *nels_list) {
 		cur = cur -> next;
 		(*nels_list)++;
 	}
-	// Sequence is in reverse and has an auxiliary head node
-	// ex. seq -> auxiliary head node -> last value node -> second to last...
 	Node *seq = malloc(sizeof(Node));
 	seq -> next = NULL;
-	Node *new;
+	Node *new = NULL;
 	int q = 0, row = 0, i = 0;
 	long t1 = 1, t2 = 1;
 	while (t1 * t2 < (*nels_list)) {
@@ -77,6 +75,9 @@ static Node *Get_Seq(Node *list, long *nels_list) {
 			for (i = 0; i < row; i++) { t1 *= 2; }
 		}
 	}
+	// Destroy extra node
+	seq = seq -> next;
+	free(new);
 	return seq;
 }
 
@@ -90,7 +91,7 @@ Node *Shell_Sort(Node *list) {
 	list -> next = temp;	
 	// Generate sequence
 	Node *seq_ptr = Get_Seq(list, &nels);
-	Node *seq = seq_ptr -> next; // skip over auxiliary head node
+	Node *seq = seq_ptr;
 	// For each number in sequence...
 	while (seq != NULL) {
 		// For each "column" from right to left (indexing from 0)...
